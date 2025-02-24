@@ -7,7 +7,7 @@ class CustomUser(models.Model):
     height = models.FloatField(null=True, blank=True)  # in cm 
     weight = models.FloatField(null=True, blank=True)  # in kg
 
-    def str(self):
+    def __str__(self):
         return self.user.username
 
 # Workout Model
@@ -18,7 +18,7 @@ class Workout(models.Model):
     calories_burned = models.FloatField()
     date = models.DateTimeField(auto_now_add=True)
 
-    def str(self):
+    def __str__(self):
         return f"{self.name} - {self.user.username}"
 
 # Goal Model

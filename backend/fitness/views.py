@@ -9,40 +9,87 @@ from django.contrib.auth import get_user_model
 from .serializers import CustomUserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+from django.db import transaction
+from rest_framework.exceptions import ValidationError
+from .models import CustomUser
 
 User = get_user_model()
+
 class SignupView(APIView):
+    @transaction.atomic
     def post(self, request):
-        username = request.data.get('username')
-        email = request.data.get('email')
-        password = request.data.get('password')
+        serializer = CustomUserSerializer(data=request.data)
+        
+        try:
+            # Check if user exists
+            username = request.data.get('username')
+            email = request.data.get('email')
+            
+            existing_user = User.objects.filter(username=username).first()
+            if existing_user:
+                # Check if CustomUser exists for this user
+                try:
+                    custom_user = existing_user.customuser
+                    return Response({
+                        "message": "User already exists",
+                        "user_details": {
+                            "username": existing_user.username,
+                            "email": existing_user.email,
+                            "date_of_birth": custom_user.date_of_birth,
+                            "height": custom_user.height,
+                            "weight": custom_user.weight,
+                        }
+                    }, status=status.HTTP_200_OK)
+                except CustomUser.DoesNotExist:
+                    # If CustomUser doesn't exist, create one
+                    CustomUser.objects.create(
+                        user=existing_user,
+                        date_of_birth=request.data.get('date_of_birth'),
+                        height=request.data.get('height'),
+                        weight=request.data.get('weight')
+                    )
+                    return Response({
+                        "message": "CustomUser profile created for existing user",
+                        "user_details": {
+                            "username": existing_user.username,
+                            "email": existing_user.email,
+                            "date_of_birth": request.data.get('date_of_birth'),
+                            "height": request.data.get('height'),
+                            "weight": request.data.get('weight'),
+                        }
+                    }, status=status.HTTP_200_OK)
 
-        # Check if user already exists
-        user = User.objects.filter(username=username, email=email).first()
-        if user:
+            existing_email = User.objects.filter(email=email).first()
+            if existing_email:
+                return Response({
+                    "error": "Email already registered"
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            # Validate and save
+            if serializer.is_valid(raise_exception=True):
+                custom_user = serializer.save()
+                
+                return Response({
+                    "message": "User registered successfully",
+                    "user": {
+                        "username": custom_user.user.username,
+                        "email": custom_user.user.email,
+                        "date_of_birth": custom_user.date_of_birth,
+                        "height": custom_user.height,
+                        "weight": custom_user.weight,
+                    }
+                }, status=status.HTTP_201_CREATED)
+
+        except ValidationError as e:
             return Response({
-                "message": "User already exists",
-                "user_details": {
-                    "username": user.username,
-                    "email": user.email,
-                    "date_of_birth": user.customuser.date_of_birth,
-                    "height": user.customuser.height,
-                    "weight": user.customuser.weight,
-                }
-            }, status=status.HTTP_200_OK)
-
-        # Create User
-        user = User.objects.create_user(username=username, email=email, password=password)
-
-        # Create CustomUser linked to User
-        custom_user = CustomUser.objects.create(
-            user=user,
-            date_of_birth=request.data.get('date_of_birth'),
-            height=request.data.get('height'),
-            weight=request.data.get('weight')
-        )
-
-        return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+                "error": str(e)
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response({
+                "error": "An unexpected error occurred",
+                "details": str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
