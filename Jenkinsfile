@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        // Set environment variables
-        DJANGO_SETTINGS_MODULE = 'fitness_tracker.settings'
-        DATABASE_URL = credentials('DATABASE_URL') // Use Jenkins credentials
-    }
-
     stages {
         stage('Checkout') {
             steps {
