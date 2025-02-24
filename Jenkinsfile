@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    environment {
+        // Set environment variables
+        DJANGO_SETTINGS_MODULE = 'fitness_tracker.settings'
+        DATABASE_URL = credentials('DATABASE_URL') // Use Jenkins credentials
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Pull code from Git repository
+                echo 'checkout'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                echo 'install dependencies'
+        }
+
+        stage('Run Tests') {
+            steps {
+               echo 'running tests'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Build'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Deploy to your server (e.g., using Docker, Ansible, or SSH)
+                echo 'deploy' // Example for Docker
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}

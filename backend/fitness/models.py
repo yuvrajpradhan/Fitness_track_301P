@@ -31,7 +31,7 @@ class Goal(models.Model):
     deadline = models.DateField()
     completed = models.BooleanField(default=False)
 
-    def str(self):
+    def __str__(self):
         return f"{self.goal_name} - {self.user.username}"
 
 # Daily Activity Model
@@ -42,7 +42,7 @@ class DailyActivity(models.Model):
     calories_burned = models.FloatField(default=0.0)
     date = models.DateField(auto_now_add=True)
 
-    def str(self):
+    def __str__(self):
         return f"Activity - {self.user.username} ({self.date})"
 
 # Progress Tracking Model
@@ -53,8 +53,9 @@ class Progress(models.Model):
     muscle_mass = models.FloatField(null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
-    def str(self):
+    def __str__(self):
         return f"Progress - {self.user.username} ({self.date})"
+
 class Meal(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)

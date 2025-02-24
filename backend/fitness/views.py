@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from .models import Workout, Goal, DailyActivity, Progress
-from .serializers import WorkoutSerializer, GoalSerializer, DailyActivitySerializer, ProgressSerializer
+from .models import Workout, Goal, DailyActivity, Progress, Meal, WaterIntake, SleepRecord
+from .serializers import WorkoutSerializer, GoalSerializer, DailyActivitySerializer, ProgressSerializer,MealSerializer,WaterIntakeSerializer,SleepRecordSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -138,7 +138,7 @@ class DailyActivityViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return DailyActivity.objects.filter(user=self.request.user)
+        return DailyActivity.objects.filter(user=self.request.user.customuser)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user.customuser)
@@ -149,7 +149,37 @@ class ProgressViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Progress.queryset.filter(user=self.request.user)
+        return Progress.objects.filter(user=self.request.user.customuser)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user.customuser)
+
+class MealViewSet(viewsets.ModelViewSet):
+    serializer_class = MealSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Meal.objects.filter(user=self.request.user.customuser)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user.customuser)
+
+class WaterIntakeViewSet(viewsets.ModelViewSet):
+    serializer_class = WaterIntakeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return WaterIntake.objects.filter(user=self.request.user.customuser)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user.customuser)
+
+class SleepRecordViewSet(viewsets.ModelViewSet):
+    serializer_class = SleepRecordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return SleepRecord.objects.filter(user=self.request.user.customuser)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user.customuser)

@@ -3,7 +3,7 @@ from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
     WorkoutViewSet, GoalViewSet, DailyActivityViewSet, ProgressViewSet,
-    SignupView, user_dashboard
+    SignupView, user_dashboard, MealViewSet,WaterIntakeViewSet,SleepRecordViewSet
 )
 
 # Create a router and register ViewSets
@@ -12,6 +12,9 @@ router.register(r'workouts', WorkoutViewSet, basename='workout')
 router.register(r'goals', GoalViewSet, basename='goal')
 router.register(r'daily-activities', DailyActivityViewSet, basename='daily-activity')
 router.register(r'progress', ProgressViewSet, basename='progress')
+router.register(r'water', WaterIntakeViewSet, basename='water')
+router.register(r'sleep', SleepRecordViewSet, basename='sleep')
+router.register(r'meals', MealViewSet, basename='meal')
 
 urlpatterns = [
     path('api/', include(router.urls)),
