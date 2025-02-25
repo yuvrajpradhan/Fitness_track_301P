@@ -2,28 +2,36 @@ from rest_framework import serializers
 from .models import CustomUser, Workout, Goal, DailyActivity, Progress, Meal, WaterIntake, SleepRecord
 from django.contrib.auth.models import User
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email']
-
 class CustomUserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')  # ✅ Get from User model
+    email = serializers.EmailField(source='user.email')  # ✅ Get from User model
+    password = serializers.CharField(write_only=True)  # ✅ Ensure password is write-only
+
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'password', 'date_of_birth', 'height', 'weight']
         extra_kwargs = {'password': {'write_only': True}}
 
-
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password'],
+        # Extract user-related data
+        user_data = validated_data.pop('user', {})
+        
+        # Create User first
+        user = User.objects.create(
+            username=user_data['username'],
+            email=user_data['email']
+        )
+        user.set_password(validated_data.pop('password'))  # ✅ Hash password
+        user.save()
+
+        # Create CustomUser linked to User
+        custom_user = CustomUser.objects.create(
+            user=user,
             date_of_birth=validated_data.get('date_of_birth'),
             height=validated_data.get('height'),
             weight=validated_data.get('weight'),
         )
-        return user
+        return custom_user
 
 
 class WorkoutSerializer(serializers.ModelSerializer):

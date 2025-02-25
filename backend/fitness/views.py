@@ -12,10 +12,12 @@ from rest_framework.decorators import api_view, permission_classes
 from django.db import transaction
 from rest_framework.exceptions import ValidationError
 from .models import CustomUser
+from rest_framework.permissions import AllowAny
 
 User = get_user_model()
 
 class SignupView(APIView):
+    permission_classes = [AllowAny]
     @transaction.atomic
     def post(self, request):
         serializer = CustomUserSerializer(data=request.data)

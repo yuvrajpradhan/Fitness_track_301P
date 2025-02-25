@@ -65,14 +65,15 @@ class Meal(models.Model):
     fat = models.FloatField()  # in grams
     date = models.DateTimeField(auto_now_add=True)
 
-    def str(self):
+    def __str__(self):
         return f"{self.name} - {self.user.username}"
+
 class WaterIntake(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     amount = models.FloatField()  # in liters
     date = models.DateField(auto_now_add=True)
 
-    def str(self):
+    def __str__(self):
         return f"{self.amount}L - {self.user.username} ({self.date})"
 class SleepRecord(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
