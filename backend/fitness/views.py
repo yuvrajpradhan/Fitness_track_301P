@@ -99,18 +99,24 @@ class SignupView(APIView):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_dashboard(request):
-    user = request.user
-    custom_user = user.customuser
-    data = {
-        "username": user.username,
-        "email": user.email,
-        "age": user.custom_user.age,
-        "height": user.custom_user.height,
-        "weight": user.custom_user.weight,
-        "goals": list(custom_user.goal_set.values()),  # Fetch user's goals
-        "workouts": list(user.workout_set.values()),  # Fetch user's workouts
-    }
-    return Response(data, status=status.HTTP_200_OK)
+    try:
+        user = request.user
+        custom_user = user.customuser  # Ensure this exists
+
+        data = {
+            "username": user.username,
+            "email": user.email,
+            "height": custom_user.height,
+            "weight": custom_user.weight,
+            "goals": list(custom_user.goal_set.values()),  # ✅ Corrected
+            "workouts": list(custom_user.workout_set.values()),  # ✅ Corrected
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    
+    except CustomUser.DoesNotExist:
+        return Response({"error": "Custom user profile not found."}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class WorkoutViewSet(viewsets.ModelViewSet):

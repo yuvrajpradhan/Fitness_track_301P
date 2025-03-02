@@ -21,7 +21,7 @@ urlpatterns = [
     
     # Authentication Endpoints
     path('api/signup/', SignupView.as_view(), name='signup'),
-    path('user-dashboard/', user_dashboard, name='user_dashboard'),
+    path('api/user-dashboard/', user_dashboard, name='user_dashboard'),
     
     # JWT Authentication
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

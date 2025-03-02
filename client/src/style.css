@@ -6,13 +6,17 @@
   font-family: sans-serif;
 }
 
-body {
+/* body {
+  background: url('../public/images/login.jpg') no-repeat center center;
+  background-size: cover;
+  height: 100vh;
+} */
+
+.wrappersignIn{
   background: url('../public/images/login.jpg') no-repeat center center;
   background-size: cover;
   height: 100vh;
 }
-
-
 .wrapper {
   display: flex;
   height: 100vh;
