@@ -1,6 +1,4 @@
 import React from "react";
-import axios from "axios";
-import { useState } from "react";
 import "./style.css";
 import Login from "./components/login";
 import Signup from "./components/signup";
