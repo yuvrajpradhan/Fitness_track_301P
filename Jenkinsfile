@@ -15,9 +15,9 @@ pipeline {
         stage('Build and Start Containers') {
             steps {
                 script {
-                    sh 'docker-compose pull' // Pull latest images (if any)
-                    sh 'docker-compose build --no-cache' // Ensure fresh build
-                    sh 'docker-compose up -d' // Start containers
+                    sh 'docker compose pull' // Pull latest images (if any)
+                    sh 'docker compose build --no-cache' // Ensure fresh build
+                    sh 'docker compose up -d' // Start containers
                 }
             }
         }
