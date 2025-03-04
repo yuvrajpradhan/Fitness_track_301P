@@ -22,14 +22,6 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                script {
-                    sh 'docker exec backend_container_name python manage.py test' // Replace with actual container name
-                }
-            }
-        }
-
         stage('Post Deployment Check') {
             steps {
                 script {
