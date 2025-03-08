@@ -66,13 +66,13 @@ pipeline {
                     def containers = ['postgres_db', 'django_backend', 'react_frontend']
 
                     for (container in containers) {
-                        def isStopped = bat(script: "docker ps -a --filter 'name=${container}' --format '{{.Names}}'", returnStdout: true).trim()
-                        
+                        def isStopped = bat(script: "docker ps -a --filter \"name=${container}\" --format \"{{.Names}}\"", returnStdout: true).trim()
+
                         if (isStopped) {
                             echo "Starting existing container: ${container}"
                             bat "docker start ${container}"
                         } else {
-                            echo "Container ${container} does not exist."
+                            echo "Container ${container} does not exist or is already running."
                         }
                     }
                 }
@@ -100,3 +100,5 @@ pipeline {
         }
     }
 }
+
+
