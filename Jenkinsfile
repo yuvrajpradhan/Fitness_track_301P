@@ -60,15 +60,20 @@ pipeline {
             }
         }
 
-        stage('Start or Recreate Containers') {
+        stage('Start Existing Containers') {
             steps {
                 script {
-                    def isRunning = bat(script: 'docker ps --filter "name=backend" --format "{{.Names}}"', returnStdout: true).trim()
-                    
-                    if (isRunning) {
-                        echo 'Containers are already running. Skipping recreation.'
-                    } else {
-                        bat 'docker-compose up -d' // Start only if not running
+                    def containers = ['postgres_db', 'django_backend', 'react_frontend']
+
+                    for (container in containers) {
+                        def isStopped = bat(script: "docker ps -a --filter 'name=${container}' --format '{{.Names}}'", returnStdout: true).trim()
+                        
+                        if (isStopped) {
+                            echo "Starting existing container: ${container}"
+                            bat "docker start ${container}"
+                        } else {
+                            echo "Container ${container} does not exist."
+                        }
                     }
                 }
             }
