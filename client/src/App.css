@@ -27,6 +27,20 @@
 .App-link {
   color: #61dafb;
 }
+/* dashboard_style.css */
+.loginfo-link button {
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.loginfo-link button:hover {
+  background-color: #357ABD;
+}
 
 @keyframes App-logo-spin {
   from {

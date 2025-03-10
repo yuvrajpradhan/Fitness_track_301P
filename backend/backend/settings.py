@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'fitness_db',
         'USER': 'admin',
         'PASSWORD': 'password',
-        'HOST': 'db',  # Since Docker is exposing the port to localhost
+        'HOST': 'localhost',  # change to when using docker'db'
         'PORT': '5432',
     }
 }
