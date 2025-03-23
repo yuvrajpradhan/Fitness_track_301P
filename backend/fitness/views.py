@@ -119,14 +119,99 @@ def user_dashboard(request):
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+# class WorkoutViewSet(viewsets.ModelViewSet):
+#     serializer_class = WorkoutSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return Workout.objects.filter(user=self.request.user.customuser)  
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user.customuser)
+
+
+# # Goal ViewSet
+# class GoalViewSet(viewsets.ModelViewSet):
+#     serializer_class = GoalSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return Goal.objects.filter(user=self.request.user.customuser) 
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user.customuser)
+
+# # Daily Activity ViewSet
+# class DailyActivityViewSet(viewsets.ModelViewSet):
+#     serializer_class = DailyActivitySerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return DailyActivity.objects.filter(user=self.request.user.customuser)
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user.customuser)
+
+# # Progress Tracking ViewSet
+# class ProgressViewSet(viewsets.ModelViewSet):
+#     serializer_class = ProgressSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return Progress.objects.filter(user=self.request.user.customuser)
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user.customuser)
+
+# class MealViewSet(viewsets.ModelViewSet):
+#     serializer_class = MealSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return Meal.objects.filter(user=self.request.user.customuser)
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user.customuser)
+
+# class WaterIntakeViewSet(viewsets.ModelViewSet):
+#     serializer_class = WaterIntakeSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return WaterIntake.objects.filter(user=self.request.user.customuser)
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user.customuser)
+
+# class SleepRecordViewSet(viewsets.ModelViewSet):
+#     serializer_class = SleepRecordSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return SleepRecord.objects.filter(user=self.request.user.customuser)
+
+#     def perform_create(self, serializer):
+#         serializer.save(user=self.request.user.customuser)
+
 class WorkoutViewSet(viewsets.ModelViewSet):
     serializer_class = WorkoutSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Workout.objects.filter(user=self.request.user.customuser)  
+        # Return only workouts for the authenticated user
+        return Workout.objects.filter(user=self.request.user.customuser)
+
     def perform_create(self, serializer):
+        # Automatically set the user to the current user when creating a workout
         serializer.save(user=self.request.user.customuser)
+
+    def update(self, request, *args, **kwargs):
+        # Handle PUT and PATCH requests
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 
 # Goal ViewSet
@@ -135,10 +220,22 @@ class GoalViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Goal.objects.filter(user=self.request.user.customuser) 
+        # Return only goals for the authenticated user
+        return Goal.objects.filter(user=self.request.user.customuser)
 
     def perform_create(self, serializer):
+        # Automatically set the user to the current user when creating a goal
         serializer.save(user=self.request.user.customuser)
+
+    def update(self, request, *args, **kwargs):
+        # Handle PUT and PATCH requests
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
 
 # Daily Activity ViewSet
 class DailyActivityViewSet(viewsets.ModelViewSet):
@@ -146,48 +243,110 @@ class DailyActivityViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        # Return only daily activities for the authenticated user
         return DailyActivity.objects.filter(user=self.request.user.customuser)
 
     def perform_create(self, serializer):
+        # Automatically set the user to the current user when creating a daily activity
         serializer.save(user=self.request.user.customuser)
 
-# Progress Tracking ViewSet
+    def update(self, request, *args, **kwargs):
+        # Handle PUT and PATCH requests
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+# Progress ViewSet
 class ProgressViewSet(viewsets.ModelViewSet):
     serializer_class = ProgressSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        # Return only progress records for the authenticated user
         return Progress.objects.filter(user=self.request.user.customuser)
 
     def perform_create(self, serializer):
+        # Automatically set the user to the current user when creating a progress record
         serializer.save(user=self.request.user.customuser)
 
+    def update(self, request, *args, **kwargs):
+        # Handle PUT and PATCH requests
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+# Meal ViewSet
 class MealViewSet(viewsets.ModelViewSet):
     serializer_class = MealSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        # Return only meals for the authenticated user
         return Meal.objects.filter(user=self.request.user.customuser)
 
     def perform_create(self, serializer):
+        # Automatically set the user to the current user when creating a meal
         serializer.save(user=self.request.user.customuser)
 
+    def update(self, request, *args, **kwargs):
+        # Handle PUT and PATCH requests
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+# Water Intake ViewSet
 class WaterIntakeViewSet(viewsets.ModelViewSet):
     serializer_class = WaterIntakeSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        # Return only water intake records for the authenticated user
         return WaterIntake.objects.filter(user=self.request.user.customuser)
 
     def perform_create(self, serializer):
+        # Automatically set the user to the current user when creating a water intake record
         serializer.save(user=self.request.user.customuser)
 
+    def update(self, request, *args, **kwargs):
+        # Handle PUT and PATCH requests
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+# Sleep Record ViewSet
 class SleepRecordViewSet(viewsets.ModelViewSet):
     serializer_class = SleepRecordSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        # Return only sleep records for the authenticated user
         return SleepRecord.objects.filter(user=self.request.user.customuser)
 
     def perform_create(self, serializer):
+        # Automatically set the user to the current user when creating a sleep record
         serializer.save(user=self.request.user.customuser)
+
+    def update(self, request, *args, **kwargs):
+        # Handle PUT and PATCH requests
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)

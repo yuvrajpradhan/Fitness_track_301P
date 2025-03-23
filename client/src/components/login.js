@@ -38,7 +38,7 @@ export default function Login() {
   };
 
   return (
-    <div className="wrapper signIn">
+    <div className="wrappersignIn">
       <div className="form">
         <div className="heading">LOGIN</div>
         <form onSubmit={handleLogin}>

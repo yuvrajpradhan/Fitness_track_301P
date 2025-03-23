@@ -1,0 +1,136 @@
+/* Page layout styling */
+.loginfo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0); /* Subtle gradient background */
+    padding: 30px;
+}
+
+/* Background image covering the whole section */
+.full-width-section {
+    width: 100%;
+    min-height: 100vh;
+    background: url('../public/images/login.jpg') no-repeat center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+/* Form container with transparency */
+.loginfo-container {
+    background: rgba(255, 255, 255, 0.95); /* Slight transparency */
+    width: 80%;
+    max-width: 1200px;
+    padding: 60px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.3s;
+}
+
+/* Hover effect */
+.loginfo-container:hover {
+    transform: translateY(-10px);
+}
+
+
+/* Form styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Input and button styling */
+input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow on inputs */
+}
+
+/* Input focus effect */
+input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); 
+    outline: none;
+}
+
+/* Button styling */
+button {
+    background: linear-gradient(135deg, #007bff, #0056b3); /* Gradient button */
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px; /* Rounded button */
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+    max-width: 220px;
+}
+
+/* Button hover effect */
+button:hover {
+    background: linear-gradient(135deg, #0056b3, #003f7f);
+    box-shadow: 0 8px 20px rgba(0, 91, 187, 0.6);
+    transform: scale(1.05); /* Slight scaling on hover */
+}
+
+/* Heading styles */
+h1, h2 {
+    text-align: center;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-bottom: 15px;
+}
+
+/* Subtle animation on heading */
+h1 {
+    font-size: 2.5rem;
+    animation: fadeIn 1s ease-in-out;
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #555;
+}
+
+/* Smooth animation */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .loginfo-container {
+        padding: 30px;
+        gap: 20px;
+    }
+
+    input, button {
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+}
